@@ -23,8 +23,8 @@ video,audio{width:100%;margin-top:8px;border-radius:8px}
 #lb{position:fixed;inset:0;background:#000e;display:none;z-index:9;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
 #lb img{display:block;margin:auto;max-width:100%}#lb button{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;font-size:1.4rem;background:#fff;border:0;border-radius:50%;width:40px;height:40px}
 .tip{background:var(--card);border-left:4px solid var(--pri);padding:8px 12px;border-radius:8px;margin:0 0 12px;font-size:.85rem;color:var(--mut)}
-#cover{position:fixed;inset:0;z-index:20;background:#8fd4f3;overflow:hidden}
-#cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+#cover{position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;z-index:20;background:#8fd4f3;overflow:hidden}
+#cover img{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 30%;display:block}
 #cover .cv{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:90px 20px calc(28px + env(safe-area-inset-bottom));background:linear-gradient(to top,#000d 0%,#000a 55%,#0000 100%);color:#ff8c1a}
 #cover h2{margin:0;font-size:1.9rem;font-weight:800;letter-spacing:.05em;color:#ff8c1a;text-shadow:0 2px 6px #000a}
 #cover h3{margin:0;font-size:1.4rem;color:#ff8c1a;text-shadow:0 2px 6px #000a}
