@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SATARK TIPS / ସତର୍କ ବାଣୀ</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#b9d4ea" id="tc">
 <style>
 :root{--bg:#f4f7f6;--card:#fff;--tx:#14211f;--mut:#5b6b68;--pri:#0f766e;--bd:#dbe4e2}
 @media(prefers-color-scheme:dark){:root{--bg:#10181a;--card:#182326;--tx:#e8f0ee;--mut:#9db0ac;--pri:#2dd4bf;--bd:#2a3a3d}}
@@ -23,11 +23,15 @@ video,audio{width:100%;margin-top:8px;border-radius:8px}
 #lb{position:fixed;inset:0;background:#000e;display:none;z-index:9;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
 #lb img{display:block;margin:auto;max-width:100%}#lb button{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;font-size:1.4rem;background:#fff;border:0;border-radius:50%;width:40px;height:40px}
 .tip{background:var(--card);border-left:4px solid var(--pri);padding:8px 12px;border-radius:8px;margin:0 0 12px;font-size:.85rem;color:var(--mut)}
-#cover{position:fixed;inset:0;z-index:20;background:#fff;color:#14211f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;text-align:center}
-#cover img{width:min(78vw,52vh,420px);height:auto;border-radius:50%}#cover h2{margin:0;font-size:1.3rem;color:#0f766e}#cover p{margin:0;color:#5b6b68}
-#cover button{background:#0f766e;color:#fff;border:0;border-radius:12px;padding:12px 28px;font:inherit;font-size:1.05rem;margin-top:6px}
+#cover{position:fixed;inset:0;z-index:20;background:#8fd4f3;overflow:hidden}
+#cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+#cover .cv{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:90px 20px calc(28px + env(safe-area-inset-bottom));background:linear-gradient(to top,#000d 0%,#000a 55%,#0000 100%);color:#ff8c1a}
+#cover h2{margin:0;font-size:1.9rem;font-weight:800;letter-spacing:.05em;color:#ff8c1a;text-shadow:0 2px 6px #000a}
+#cover h3{margin:0;font-size:1.4rem;color:#ff8c1a;text-shadow:0 2px 6px #000a}
+#cover p{margin:0;font-weight:600;color:#ff8c1a;text-shadow:0 2px 6px #000a}
+#cover button{background:#fff;color:#d9480f;font-weight:700;border:2px solid #ff8c1a;border-radius:12px;padding:12px 32px;font:inherit;font-size:1.05rem;font-weight:700;margin-top:10px}
 </style></head><body>
-<div id="cover"><img src="icons/cover.png" alt="Happy ASHA Worker's Day, September 21"><h2>SATARK TIPS</h2><h3 style="margin:0;font-size:1.2rem;color:#0f766e">ସତର୍କ ବାଣୀ</h3><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div>
+<div id="cover"><img src="icons/cover.jpg" alt="ASHA workers"><div class="cv"><h2>SATARK TIPS</h2><h3>ସତର୍କ ବାଣୀ</h3><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
 <header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="save" title="Save for offline">⬇ Offline</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
@@ -35,7 +39,7 @@ video,audio{width:100%;margin-top:8px;border-radius:8px}
 <script>
 const $=s=>document.querySelector(s),app=$('#app'),ICON={asha:'💰',pregnancy:'🤰',newborn:'👶',breastfeeding:'🍼',family_planning:'👨‍👩‍👧',disease_awareness:'📢',leprosy:'🖐',scd:'🩸',eye:'👁',adolescent_health:'🧑‍🎓',amlan:'💊',cancer_awareness:'🎗',heatstroke:'☀️',tuberculosis:'🫁',immunization:'💉',ors_diarrhea:'🥤',pneumonia:'😷',disaster_safety:'⛑',blood_donation:'🩸',nutrition:'🥗',video_gallery:'🎬',audio_gallery:'🎧'},TI={image:'🖼',pdf:'📄',video:'▶️',audio:'🎧'};
 let D;
-$('#go').onclick=()=>{$('#cover').style.display='none'};
+$('#go').onclick=()=>{$('#cover').style.display='none';$('#tc').content='#0f766e'};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const lab=o=>`<b>${esc(o.en)}</b><small>${esc(o.or)}</small>`;
 async function init(){
