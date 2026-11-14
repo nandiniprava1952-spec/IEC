@@ -25,12 +25,13 @@ video,audio{width:100%;margin-top:8px;border-radius:8px}
 #lb{position:fixed;inset:0;background:#000e;display:none;z-index:9;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
 #lb img{display:block;margin:auto;max-width:100%}#lb button{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;font-size:1.4rem;background:#fff;border:0;border-radius:50%;width:40px;height:40px}
 .tip{background:var(--card);border-left:4px solid var(--pri);padding:8px 12px;border-radius:8px;margin:0 0 12px;font-size:.85rem;color:var(--mut)}
-#cover{position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;z-index:20;background:#1f5fbf;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom))}
-#cover .fg{width:100%;max-width:640px;height:auto;max-height:52vh;object-fit:contain;border-radius:14px;box-shadow:0 6px 20px #0005}
-#cover .cv{display:flex;flex-direction:column;align-items:center;gap:4px}
-#cover h2{margin:10px 0 0;font-size:1.9rem;font-weight:800;letter-spacing:.05em;color:#ff8c1a;text-shadow:0 2px 6px #0006}
-#cover h3{margin:0;font-size:1.4rem;color:#ff8c1a;text-shadow:0 2px 6px #0006}
-#cover p{margin:0;font-weight:700;color:#ff8c1a;text-shadow:0 2px 6px #0006}
+#cover{position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;z-index:20;background:#1f5fbf;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:stretch;text-align:center;padding:env(safe-area-inset-top) 0 calc(24px + env(safe-area-inset-bottom))}
+#cover .fg{display:block;width:100%;height:auto;flex:none;margin:0}
+#cover .fg+.fg{margin-top:4px}
+#cover .cv{display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto 0;padding:14px 16px 0}
+#cover h3{margin:0;font-size:2.6rem;line-height:1.25;font-weight:800;color:#ff8c1a;text-shadow:0 2px 6px #0006}
+#cover h2{margin:0;font-size:.95rem;font-weight:700;letter-spacing:.18em;color:#ff8c1a;text-shadow:0 2px 6px #0006}
+#cover p{margin:4px 0 0;font-weight:700;color:#ff8c1a;text-shadow:0 2px 6px #0006}
 #cover button{background:#1f5fbf;color:#ff8c1a;border:2px solid #ff8c1a;border-radius:12px;padding:12px 32px;font:inherit;font-size:1.05rem;font-weight:700;margin-top:12px}
 #pv{position:fixed;inset:0;z-index:15;background:#2b2f33;display:none;flex-direction:column}
 .pvb{background:var(--pri);color:#fff;display:flex;gap:8px;align-items:center;padding:calc(8px + env(safe-area-inset-top)) 10px 8px}
@@ -54,7 +55,7 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
 header,.pvb{background:#1f5fbf}
 </style></head><body>
-<div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><div class="cv"><h2>SATARK TIPS</h2><h3>ସତର୍କ ବାଣୀ</h3><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
+<div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
 <header><button id="home" aria-label="Home" title="Home">🏠</button><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
