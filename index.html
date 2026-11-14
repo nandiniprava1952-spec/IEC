@@ -45,6 +45,7 @@ html{-webkit-text-size-adjust:100%}body{overscroll-behavior-y:contain;line-heigh
 *{-webkit-tap-highlight-color:transparent}button,.item,.card,a{touch-action:manipulation}
 header{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
 header button,.pvb button,.pvb a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+[hidden]{display:none!important}
 header h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 .card:active,.item:active{transform:scale(.98);background:var(--bd)}
@@ -138,8 +139,8 @@ $('#save').onclick=async()=>{
   for(let i=0;i<urls.length;i+=4)await Promise.all(urls.slice(i,i+4).map(u=>fetch(u,{mode:u.endsWith('.pdf')?'cors':'no-cors'}).catch(()=>fail++).finally(()=>{b.textContent=`⬇ ${++n}/${urls.length}`})));
   b.disabled=false;b.textContent='⬇ Offline';alert(fail?`Saved with ${fail} failures — try again on better network.`:'Saved for offline use ✓ / ଅଫଲାଇନ୍ ପାଇଁ ସେଭ୍ ହେଲା');
 };
-let dip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').hidden=false});
-$('#inst').onclick=async()=>{dip.prompt();await dip.userChoice;$('#inst').hidden=true};addEventListener('appinstalled',()=>$('#inst').hidden=true);
+let dip;const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').hidden=isApp()});
+$('#inst').onclick=async()=>{if(!dip)return;dip.prompt();const r=await dip.userChoice;dip=null;if(r.outcome==='accepted')$('#inst').hidden=true};addEventListener('appinstalled',()=>{dip=null;$('#inst').hidden=true});matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(isApp())$('#inst').hidden=true});
 const upd=()=>$('#off').style.display=navigator.onLine?'none':'block';addEventListener('online',upd);addEventListener('offline',upd);upd();
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 init();
