@@ -55,7 +55,7 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 header,.pvb{background:#1f5fbf}
 </style></head><body>
 <div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><div class="cv"><h2>SATARK TIPS</h2><h3>ସତର୍କ ବାଣୀ</h3><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
-<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
+<header><button id="home" aria-label="Home" title="Home">🏠</button><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
 <div id="pv"><div class="pvb"><button id="pvx" aria-label="Close">✕</button><span id="pvt"></span><button id="pvm" aria-label="Zoom out">−</button><button id="pvp" aria-label="Zoom in">＋</button><a id="pvd" download="document.pdf" aria-label="Download">⬇</a></div><div id="pvc"><div id="pvi"></div></div></div>
@@ -64,6 +64,7 @@ header,.pvb{background:#1f5fbf}
 const $=s=>document.querySelector(s),app=$('#app'),ICON={asha:'💰',pregnancy:'🤰',newborn:'👶',breastfeeding:'🍼',family_planning:'👨‍👩‍👧',disease_awareness:'📢',leprosy:'🖐',scd:'🩸',eye:'👁',adolescent_health:'🧑‍🎓',amlan:'💊',cancer_awareness:'🎗',heatstroke:'☀️',tuberculosis:'🫁',immunization:'💉',ors_diarrhea:'🥤',pneumonia:'😷',disaster_safety:'⛑',blood_donation:'🩸',nutrition:'🥗',video_gallery:'🎬',audio_gallery:'🎧'},TI={image:'🖼',pdf:'📄',video:'▶️',audio:'🎧'};
 let D;
 $('#go').onclick=()=>{$('#cover').style.display='none';$('#tc').content='#1f5fbf'};
+$('#home').onclick=()=>{closePv();closeLb();if(location.hash)location.hash='';$('#cover').style.display='';$('#tc').content='#1f5fbf'};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const lab=o=>`<b>${esc(o.en)}</b><small>${esc(o.or)}</small>`;
 async function init(){
