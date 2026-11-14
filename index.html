@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SATARK TIPS / ସତର୍କ ବାଣୀ</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0f766e">
+<style>
+:root{--bg:#f4f7f6;--card:#fff;--tx:#14211f;--mut:#5b6b68;--pri:#0f766e;--bd:#dbe4e2}
+@media(prefers-color-scheme:dark){:root{--bg:#10181a;--card:#182326;--tx:#e8f0ee;--mut:#9db0ac;--pri:#2dd4bf;--bd:#2a3a3d}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 "Noto Sans Oriya",Kalinga,system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+header{position:sticky;top:0;z-index:5;background:var(--pri);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;gap:10px;align-items:center}
+header h1{font-size:1.05rem;margin:0;flex:1}header button{background:#fff3;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:1rem}
+#off{display:none;background:#b45309;color:#fff;text-align:center;font-size:.85rem;padding:4px}
+main{max-width:900px;margin:0 auto;padding:12px}
+input[type=search]{width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:1rem;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;text-align:left;color:var(--tx);cursor:pointer;font:inherit}
+.card .ic{font-size:1.8rem}.card b{display:block;font-size:.92rem;margin-top:4px}.card small,.sub{color:var(--mut)}
+.item{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px;margin-bottom:8px;cursor:pointer}
+.th{width:64px;height:64px;border-radius:8px;background:var(--bd);object-fit:cover;flex:none;display:grid;place-items:center;font-size:1.6rem}
+.item b{display:block;font-size:.95rem}.badge{font-size:.7rem;background:var(--pri);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px}
+video,audio{width:100%;margin-top:8px;border-radius:8px}
+#lb{position:fixed;inset:0;background:#000e;display:none;z-index:9;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
+#lb img{display:block;margin:auto;max-width:100%}#lb button{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;font-size:1.4rem;background:#fff;border:0;border-radius:50%;width:40px;height:40px}
+.tip{background:var(--card);border-left:4px solid var(--pri);padding:8px 12px;border-radius:8px;margin:0 0 12px;font-size:.85rem;color:var(--mut)}
+#cover{position:fixed;inset:0;z-index:20;background:#fff;color:#14211f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;text-align:center}
+#cover img{width:min(78vw,52vh,420px);height:auto;border-radius:50%}#cover h2{margin:0;font-size:1.3rem;color:#0f766e}#cover p{margin:0;color:#5b6b68}
+#cover button{background:#0f766e;color:#fff;border:0;border-radius:12px;padding:12px 28px;font:inherit;font-size:1.05rem;margin-top:6px}
+</style></head><body>
+<div id="cover"><img src="icons/cover.png" alt="Happy ASHA Worker's Day, September 21"><h2>SATARK TIPS</h2><h3 style="margin:0;font-size:1.2rem;color:#0f766e">ସତର୍କ ବାଣୀ</h3><p>by ଆଶା / ASHA</p><button id="go">Open / ଖୋଲନ୍ତୁ</button></div>
+<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="save" title="Save for offline">⬇ Offline</button></header>
+<div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
+<main id="app"></main>
+<div id="lb"><button aria-label="Close">✕</button><img alt=""></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app'),ICON={asha:'💰',pregnancy:'🤰',newborn:'👶',breastfeeding:'🍼',family_planning:'👨‍👩‍👧',disease_awareness:'📢',leprosy:'🖐',scd:'🩸',eye:'👁',adolescent_health:'🧑‍🎓',amlan:'💊',cancer_awareness:'🎗',heatstroke:'☀️',tuberculosis:'🫁',immunization:'💉',ors_diarrhea:'🥤',pneumonia:'😷',disaster_safety:'⛑',blood_donation:'🩸',nutrition:'🥗',video_gallery:'🎬',audio_gallery:'🎧'},TI={image:'🖼',pdf:'📄',video:'▶️',audio:'🎧'};
+let D;
+$('#go').onclick=()=>{$('#cover').style.display='none'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lab=o=>`<b>${esc(o.en)}</b><small>${esc(o.or)}</small>`;
+async function init(){
+  try{D=await (await fetch('content.json')).json()}catch(e){app.innerHTML='<p>Could not load content. Connect to the internet once.</p>';return}
+  addEventListener('hashchange',route);route();
+}
+function route(){
+  const h=location.hash.slice(1),m=h.match(/^s=(.+)/);
+  $('#back').hidden=!m;$('#ttl').textContent=m?'':'SATARK TIPS / ସତର୍କ ବାଣୀ';
+  m?section(decodeURIComponent(m[1])):home();scrollTo(0,0);
+}
+function home(){
+  app.innerHTML=`<input type=search id=q placeholder="Search / ଖୋଜନ୍ତୁ…"><div id=res><div class=tip>📶 Tap “⬇ Offline” once on WiFi to save everything for use without internet. / ଇଣ୍ଟରନେଟ୍ ବିନା ବ୍ୟବହାର ପାଇଁ WiFi ରେ ଥରେ “⬇ Offline” ଦବାନ୍ତୁ।</div><div class=grid>`+
+  D.sections.map(s=>`<button class=card onclick="location.hash='s='+'${s.id}'"><span class=ic>${ICON[s.id]||'📁'}</span>${lab(s)}<small>${s.items.length} items</small></button>`).join('')+`</div></div>`;
+  $('#q').oninput=e=>{
+    const q=e.target.value.trim().toLowerCase();if(!q){home();$('#q').focus();return}
+    const hits=D.sections.flatMap(s=>s.items.map(i=>({...i,sid:s.id}))).filter(i=>(i.en+' '+i.or).toLowerCase().includes(q));
+    $('#res').innerHTML=hits.length?hits.map(itemHTML).join(''):'<p class=sub>No results / କିଛି ମିଳିଲା ନାହିଁ</p>';bind($('#res'),hits)};
+}
+function section(id){
+  const s=D.sections.find(x=>x.id===id);if(!s)return home();
+  $('#ttl').textContent=s.en;app.innerHTML=`<p class=sub>${esc(s.or)}</p><div id=list>${s.items.map(itemHTML).join('')}</div>`;bind(app,s.items);
+}
+function itemHTML(i,n){
+  const th=i.thumb?`<img class=th loading=lazy src="${esc(i.thumb)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'th',textContent:'${TI[i.t]}'}))">`:`<div class=th>${TI[i.t]}</div>`;
+  return `<div class=item data-u="${esc(i.url)}" data-t="${i.t}"><div>${th}</div><div style="flex:1;min-width:0">${lab(i).replace('<b>','<b><span class=badge>'+i.t.toUpperCase()+'</span> ')}<span class=slot></span></div></div>`}
+function bind(root,items){root.querySelectorAll('.item').forEach(el=>el.onclick=()=>open(el))}
+async function open(el){
+  const u=el.dataset.u,t=el.dataset.t;
+  if(t==='image'){$('#lb img').src=u;$('#lb').style.display='block'}
+  else if(t==='video'||t==='audio'){const sl=el.querySelector('.slot');if(sl.firstChild){sl.innerHTML='';return}
+    sl.innerHTML=`<${t} controls preload=metadata src="${u}" onclick="event.stopPropagation()"></${t}>`}
+  else{ // pdf: fetch as blob so the cached copy works offline
+    const b=el.querySelector('b');const old=b.innerHTML;b.innerHTML='⏳ '+old;
+    try{const r=await fetch(u);const bl=await r.blob();const url=URL.createObjectURL(new Blob([bl],{type:'application/pdf'}));window.open(url,'_blank')}
+    catch(e){alert('PDF not saved yet. Connect to the internet and open it once. / ପିଡିଏଫ୍ ସେଭ୍ ହୋଇନାହିଁ, ଥରେ ଇଣ୍ଟରନେଟ୍ ସହ ଖୋଲନ୍ତୁ।')}
+    b.innerHTML=old}
+}
+$('#lb').onclick=()=>{$('#lb').style.display='none';$('#lb img').removeAttribute('src')};
+$('#back').onclick=()=>history.length>1?history.back():location.hash='';
+$('#save').onclick=async()=>{
+  const urls=[...new Set(D.sections.flatMap(s=>s.items.flatMap(i=>i.t==='image'||i.t==='pdf'?[i.url,i.thumb]:[i.thumb])).filter(Boolean))];
+  const b=$('#save');let n=0,fail=0;b.disabled=true;
+  for(let i=0;i<urls.length;i+=4)await Promise.all(urls.slice(i,i+4).map(u=>fetch(u,{mode:u.endsWith('.pdf')?'cors':'no-cors'}).catch(()=>fail++).finally(()=>{b.textContent=`⬇ ${++n}/${urls.length}`})));
+  b.disabled=false;b.textContent='⬇ Offline';alert(fail?`Saved with ${fail} failures — try again on better network.`:'Saved for offline use ✓ / ଅଫଲାଇନ୍ ପାଇଁ ସେଭ୍ ହେଲା');
+};
+const upd=()=>$('#off').style.display=navigator.onLine?'none':'block';addEventListener('online',upd);addEventListener('offline',upd);upd();
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+init();
+</script></body></html>
