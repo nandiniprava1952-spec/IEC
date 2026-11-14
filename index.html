@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SATARK TIPS / ସତର୍କ ବାଣୀ</title>
+<title>ସତର୍କ ବାଣୀ/SATARK TIPS</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="theme-color" content="#1f5fbf" id="tc">
 <style>
@@ -58,7 +58,7 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 header,.pvb{background:#1f5fbf}
 </style></head><body>
 <div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
-<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">SATARK TIPS / ସତର୍କ ବାଣୀ</h1><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
+<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
 <div id="pv"><div class="pvb"><button id="pvx" aria-label="Close">✕</button><span id="pvt"></span><button id="pvm" aria-label="Zoom out">−</button><button id="pvp" aria-label="Zoom in">＋</button><a id="pvd" download="document.pdf" aria-label="Download">⬇</a></div><div id="pvc"><div id="pvi"></div></div></div>
@@ -76,7 +76,7 @@ async function init(){
 }
 function route(){
   const h=location.hash.slice(1),m=h.match(/^s=(.+)/);
-  $('#back').hidden=!m;$('#ttl').textContent=m?'':'SATARK TIPS / ସତର୍କ ବାଣୀ';
+  $('#back').hidden=!m;$('#ttl').textContent=m?'':'ସତର୍କ ବାଣୀ/SATARK TIPS';
   m?section(decodeURIComponent(m[1])):home();scrollTo(0,0);
 }
 function home(){
