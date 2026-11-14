@@ -19,7 +19,8 @@ for r in rows:
     grp=stack[-1] if stack else None
     if typ!='note' or not label or not name or name=='OFFLINE_ACCESS_TIP': continue
     m=re.search(r'\[[^\]]*\]\((https?://[^)]+)\)',label)
-    title=label.split('  [')[0].strip()
+    title=re.sub(r'\[[^\]]*\]\([^)]*\)','',label)
+    title=re.sub(r'\s+',' ',title).strip()
     en,od=split(title)
     sid=(re.search(r"'([^']+)'",rel).group(1) if rel else grp)
     if aud or vid:
