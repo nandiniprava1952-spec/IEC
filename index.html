@@ -59,7 +59,7 @@ header,.pvb{background:#1f5fbf}
 #ttl{cursor:pointer}
 .net{display:inline-flex;align-items:center;gap:6px;flex:none;white-space:nowrap;font:700 11px/1 system-ui,sans-serif;padding:6px 9px;border-radius:99px;background:rgba(0,0,0,.28);color:#fff}.net i{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.35);transition:background .25s,box-shadow .25s}.net.off i{background:#facc15;box-shadow:0 0 0 3px rgba(250,204,21,.35)}</style></head><body>
 <div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
-<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><span id="net" class="net" role="status" aria-live="polite"><i></i><b>Online</b></span><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
+<header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><span id="net" class="net" role="status" aria-live="polite"><i></i><b>Online</b></span><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline" aria-label="Save for offline">⬇</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
 <div id="pv"><div class="pvb"><button id="pvx" aria-label="Close">✕</button><span id="pvt"></span><button id="pvm" aria-label="Zoom out">−</button><button id="pvp" aria-label="Zoom in">＋</button><a id="pvd" download="document.pdf" aria-label="Download">⬇</a></div><div id="pvc"><div id="pvi"></div></div></div>
@@ -84,7 +84,7 @@ function route(){
   m?section(decodeURIComponent(m[1])):home();scrollTo(0,0);
 }
 function home(){
-  app.innerHTML=`<input type=search id=q placeholder="Search / ଖୋଜନ୍ତୁ…"><div id=res><div class=tip>📶 Tap “⬇ Offline” once to save everything for use without internet. / ଇଣ୍ଟରନେଟ୍ ବିନା ବ୍ୟବହାର ପାଇଁ ଥରେ “⬇ Offline” ଦବାନ୍ତୁ।</div><div class=grid>`+
+  app.innerHTML=`<input type=search id=q placeholder="Search / ଖୋଜନ୍ତୁ…"><div id=res><div class=tip>📶 Tap “⬇” once to save everything for use without internet. / ଇଣ୍ଟରନେଟ୍ ବିନା ବ୍ୟବହାର ପାଇଁ ଥରେ “⬇” ଦବାନ୍ତୁ।</div><div class=grid>`+
   D.sections.map(s=>`<button class=card onclick="location.hash='s='+'${s.id}'"><span class=ic>${ICON[s.id]||'📁'}</span><span class=cnt title="${s.items.length} items">${s.items.length}</span><b class=or>${esc(s.or||s.en)}</b><span class=en>${esc(s.en)}</span></button>`).join('')+`</div></div>`;
   $('#q').oninput=e=>{
     const q=e.target.value.trim().toLowerCase();if(!q){home();$('#q').focus();return}
@@ -141,7 +141,7 @@ $('#save').onclick=async()=>{
   const urls=[...new Set(D.sections.flatMap(s=>s.items.flatMap(i=>i.t==='image'||i.t==='pdf'?[i.url,i.thumb]:[i.thumb])).filter(Boolean))];
   const b=$('#save');let n=0,fail=0;b.disabled=true;
   for(let i=0;i<urls.length;i+=4)await Promise.all(urls.slice(i,i+4).map(u=>fetch(u,{mode:u.endsWith('.pdf')?'cors':'no-cors'}).catch(()=>fail++).finally(()=>{b.textContent=`⬇ ${++n}/${urls.length}`})));
-  b.disabled=false;b.textContent='⬇ Offline';alert(fail?`Saved with ${fail} failures — try again on better network.`:'Saved for offline use ✓ / ଅଫଲାଇନ୍ ପାଇଁ ସେଭ୍ ହେଲା');
+  b.disabled=false;b.textContent='⬇';alert(fail?`Saved with ${fail} failures — try again on better network.`:'Saved for offline use ✓ / ଅଫଲାଇନ୍ ପାଇଁ ସେଭ୍ ହେଲା');
 };
 let dip,CJ='';const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').hidden=isApp()});
 $('#inst').onclick=async()=>{if(!dip)return;dip.prompt();const r=await dip.userChoice;dip=null;if(r.outcome==='accepted')$('#inst').hidden=true};addEventListener('appinstalled',()=>{dip=null;$('#inst').hidden=true});matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(isApp())$('#inst').hidden=true});
