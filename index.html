@@ -69,10 +69,12 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
 header,.pvb{background:#1f5fbf}
 #ttl{cursor:pointer}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translate(-50%,-20px);opacity:0;z-index:60;background:#1f5fbf;color:#fff;border:2px solid #ff8c1a;border-radius:14px;padding:12px 18px;box-shadow:0 6px 20px #0006;font-size:.95rem;line-height:1.35;text-align:center;max-width:90vw;transition:opacity .3s,transform .3s;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 </style></head><body>
 <div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
 <header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
-<div id="updng" role="status" aria-live="polite"><div class="bx"><div class="sp"></div><b>Updating… / ଅପଡେଟ୍ ହେଉଛି…</b><div class="ln"><i></i></div></div></div><div id="upd" role="alert"><span>🔔 New update available<br>ନୂଆ ଅପଡେଟ୍ ଉପଲବ୍ଧ</span><button class="go">Update / ଅପଡେଟ୍</button><button class="x" aria-label="Later">✕</button></div><div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
+<div id="toast" role="status" aria-live="polite">✅ <b>Updated successfully</b><br>ଅପଡେଟ୍ ସଫଳ ହେଲା</div><div id="updng" role="status" aria-live="polite"><div class="bx"><div class="sp"></div><b>Updating… / ଅପଡେଟ୍ ହେଉଛି…</b><div class="ln"><i></i></div></div></div><div id="upd" role="alert"><span>🔔 New update available<br>ନୂଆ ଅପଡେଟ୍ ଉପଲବ୍ଧ</span><button class="go">Update / ଅପଡେଟ୍</button><button class="x" aria-label="Later">✕</button></div><div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
 <div id="pv"><div class="pvb"><button id="pvx" aria-label="Close">✕</button><span id="pvt"></span><button id="pvm" aria-label="Zoom out">−</button><button id="pvp" aria-label="Zoom in">＋</button><a id="pvd" download="document.pdf" aria-label="Download">⬇</a></div><div id="pvc"><div id="pvi"></div></div></div>
 <div id="lb"><button aria-label="Close">✕</button><img alt=""></div>
@@ -158,13 +160,17 @@ let dip,CJ='';const isApp=()=>matchMedia('(display-mode: standalone)').matches||
 $('#inst').onclick=async()=>{if(!dip)return;dip.prompt();const r=await dip.userChoice;dip=null;if(r.outcome==='accepted')$('#inst').hidden=true};addEventListener('appinstalled',()=>{dip=null;$('#inst').hidden=true});matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(isApp())$('#inst').hidden=true});
 const upd=()=>$('#off').style.display=navigator.onLine?'none':'block';addEventListener('online',upd);addEventListener('offline',upd);upd();
 let updAct=null,reloading=false;
+const UF='satark_updated',setUF=()=>{try{localStorage.setItem(UF,'1')}catch(e){}};
+function showUpdated(){try{if(!localStorage.getItem(UF))return;localStorage.removeItem(UF)}catch(e){return}
+  const t=$('#toast');setTimeout(()=>t.classList.add('on'),400);t.onclick=()=>t.classList.remove('on');setTimeout(()=>t.classList.remove('on'),5000)}
 function showUpd(fn){updAct=fn;$('#upd').style.display='flex'}
-$('#upd .go').onclick=()=>{$('#upd').style.display='none';$('#updng').style.display='flex';setTimeout(()=>location.reload(),12000);updAct&&updAct()};
+$('#upd .go').onclick=()=>{setUF();$('#upd').style.display='none';$('#updng').style.display='flex';setTimeout(()=>location.reload(),12000);updAct&&updAct()};
 $('#upd .x').onclick=()=>{$('#upd').style.display='none'};
 async function checkContent(){if(!navigator.onLine||!CJ)return;try{const t=await (await fetch('content.json',{cache:'no-store'})).text();if(t&&t!==CJ){try{JSON.parse(t)}catch(e){return}showUpd(()=>location.reload())}}catch(e){}}
 if('serviceWorker'in navigator){
   addEventListener('load',async()=>{
     try{
+      const hadCtl=!!navigator.serviceWorker.controller;
       const reg=await navigator.serviceWorker.register('sw.js');
       const ask=w=>showUpd(()=>w.postMessage('SKIP_WAITING'));
       const track=w=>w&&w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)ask(w)});
@@ -173,9 +179,9 @@ if('serviceWorker'in navigator){
       const chk=()=>{if(navigator.onLine){reg.update().catch(()=>{});checkContent()}};
       document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')chk()});
       setInterval(chk,30*60*1000);
-      navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;location.reload()});
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;if(hadCtl)setUF();reloading=true;location.reload()});
     }catch(e){}
   });
 }
-init();
+showUpdated();init();
 </script></body></html>
