@@ -1,6 +1,11 @@
-const V='iec-v35',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)))});
-self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting()});
+const V='iec-v37',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js','update-kit.js'];
+// install: download every app file and report the real progress to the page (drives the update ring).
+// The new version then WAITS; it is switched on only when the user taps "Update" (see update-kit.js).
+self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(V);let n=0,dead=0;
+  const say=async p=>{const l=await self.clients.matchAll({includeUncontrolled:true,type:'window'});if(!dead)l.forEach(w=>w.postMessage({type:'upk-progress',v:V,pct:p}))};
+  await say(0);
+  try{await Promise.all(SHELL.map(async u=>{const r=await fetch(new Request(u,{cache:'reload'}));if(!r.ok)throw new Error(u);await c.put(u,r);await say(Math.round(++n/SHELL.length*100))}))}catch(x){dead=1;throw x}})())});
+self.addEventListener('message',e=>{const d=e.data;if(d==='SKIP_WAITING'||(d&&d.type==='SKIP_WAITING'))self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V&&x!==V+'-media').map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
   const r=e.request,u=new URL(r.url);
