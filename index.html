@@ -68,6 +68,7 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 @media(max-width:360px){.grid{grid-template-columns:1fr}}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
 header,.pvb{background:#1f5fbf}
+#ttl{cursor:pointer}
 </style></head><body>
 <div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
 <header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline">⬇ Offline</button></header>
@@ -79,7 +80,9 @@ header,.pvb{background:#1f5fbf}
 const $=s=>document.querySelector(s),app=$('#app'),ICON={asha:'💰',pregnancy:'🤰',newborn:'👶',breastfeeding:'🍼',family_planning:'👨‍👩‍👧',disease_awareness:'📢',leprosy:'🖐',scd:'🩸',eye:'👁',adolescent_health:'🧑‍🎓',amlan:'💊',cancer_awareness:'🎗',heatstroke:'☀️',tuberculosis:'🫁',immunization:'💉',ors_diarrhea:'🥤',pneumonia:'😷',disaster_safety:'⛑',blood_donation:'🩸',nutrition:'🥗',video_gallery:'🎬',audio_gallery:'🎧'},TI={image:'🖼',pdf:'📄',video:'▶️',audio:'🎧'};
 let D;
 $('#go').onclick=()=>{$('#cover').style.display='none';$('#tc').content='#1f5fbf'};
-$('#home').onclick=()=>{closePv();closeLb();if(location.hash)location.hash='';$('#cover').style.display='';$('#tc').content='#1f5fbf'};
+function showCover(){closePv();closeLb();const c=$('#cover');c.style.display='';c.scrollTop=0;$('#tc').content='#1f5fbf'}
+$('#home').onclick=()=>{closePv();closeLb();$('#cover').style.display='none';if(location.hash)location.hash='';else route();scrollTo(0,0)};
+$('#ttl').onclick=()=>{if(!/^#s=/.test(location.hash))showCover()};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const lab=o=>`<b>${esc(o.en)}</b><small>${esc(o.or)}</small>`;
 async function init(){

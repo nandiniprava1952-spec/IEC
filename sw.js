@@ -1,4 +1,4 @@
-const V='iec-v33',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js'];
+const V='iec-v34',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)))});
 self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V&&x!==V+'-media').map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
