@@ -34,6 +34,8 @@ video,audio{width:100%;margin-top:8px;border-radius:8px}
 #cover h2{margin:0;font-size:.95rem;font-weight:700;letter-spacing:.18em;color:#ff8c1a;text-shadow:0 2px 6px #0006}
 #cover p{margin:0;font-size:.95rem;font-weight:700;color:#ff8c1a;text-shadow:0 2px 6px #0006}
 #cover .cv{display:flex;flex-direction:column;align-items:center;margin:0;padding:0 16px}
+#stoast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;max-width:90%;padding:10px 16px;border-radius:20px;background:#111;color:#fff;font-size:14px;text-align:center}
+#cover #cinst{margin-top:10px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.55)}
 #cover button{background:#1f5fbf;color:#ff8c1a;border:2px solid #ff8c1a;border-radius:12px;padding:12px 32px;font:inherit;font-size:1.05rem;font-weight:700;margin-top:14px}
 #pv{position:fixed;inset:0;z-index:15;background:#2b2f33;display:none;flex-direction:column}
 .pvb{background:var(--pri);color:#fff;display:flex;gap:8px;align-items:center;padding:calc(8px + env(safe-area-inset-top)) 10px 8px}
@@ -61,7 +63,8 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 header,.pvb{background:#1f5fbf}
 #ttl{cursor:pointer}
 .net{display:inline-flex;align-items:center;gap:6px;flex:none;white-space:nowrap;font:700 11px/1 system-ui,sans-serif;padding:6px 9px;border-radius:99px;background:rgba(0,0,0,.28);color:#fff}.net i{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.35);transition:background .25s,box-shadow .25s}.net.off i{background:#facc15;box-shadow:0 0 0 3px rgba(250,204,21,.35)}</style></head><body>
-<div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button></div></div>
+<div id="cover"><img class="fg" src="icons/cover-full.jpg" alt="ASHA workers"><img class="fg" src="icons/cover-asha-cycle.jpg" alt="ASHA worker on a bicycle"><div class="cv"><div class="ov"><h3>ସତର୍କ ବାଣୀ</h3><h2>SATARK TIPS</h2><p>by ଆଶା (ASHA)</p></div><button id="go">Open / ଖୋଲନ୍ତୁ</button><button id="cinst" hidden>Install app / ଆପ୍ ଇନଷ୍ଟଲ୍ କରନ୍ତୁ</button></div></div>
+<div id="stoast" hidden></div>
 <header><button id="back" hidden aria-label="Back">←</button><h1 id="ttl">ସତର୍କ ବାଣୀ/SATARK TIPS</h1><span id="net" class="net" role="status" aria-live="polite"><i></i><b>Online</b></span><button id="home" aria-label="Home" title="Home">🏠</button><button id="inst" hidden title="Install app" aria-label="Install app">📲</button><button id="save" title="Save for offline" aria-label="Save for offline">⬇</button></header>
 <div id="off">Offline / ଅଫଲାଇନ୍ — showing saved content</div>
 <main id="app"></main>
@@ -146,8 +149,8 @@ $('#save').onclick=async()=>{
   for(let i=0;i<urls.length;i+=4)await Promise.all(urls.slice(i,i+4).map(u=>fetch(u,{mode:u.endsWith('.pdf')?'cors':'no-cors'}).catch(()=>fail++).finally(()=>{b.textContent=`⬇ ${++n}/${urls.length}`})));
   b.disabled=false;b.textContent='⬇';alert(fail?`Saved with ${fail} failures — try again on better network.`:'Saved for offline use ✓ / ଅଫଲାଇନ୍ ପାଇଁ ସେଭ୍ ହେଲା');
 };
-let dip,CJ='';const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').hidden=isApp()});
-$('#inst').onclick=async()=>{if(!dip)return;dip.prompt();const r=await dip.userChoice;dip=null;if(r.outcome==='accepted')$('#inst').hidden=true};addEventListener('appinstalled',()=>{dip=null;$('#inst').hidden=true});matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(isApp())$('#inst').hidden=true});
+let dip,CJ='',tt;const say=m=>{const e=$('#stoast');e.textContent=m;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,3500)};const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').hidden=isApp()});$('#cinst').hidden=isApp();$('#cinst').onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null}else say(/iphone|ipad|ipod/i.test(navigator.userAgent)?'To install: tap Share, then Add to Home Screen. / ସେୟାର୍ ଟାପ୍ କରି “Add to Home Screen” ବାଛନ୍ତୁ।':'To install: open the browser menu (⋮) and tap Install app or Add to Home screen. / ବ୍ରାଉଜର୍ ମେନୁ (⋮) ରୁ “Install app” ଦବାନ୍ତୁ।')};
+$('#inst').onclick=async()=>{if(!dip)return;dip.prompt();const r=await dip.userChoice;dip=null;if(r.outcome==='accepted')$('#inst').hidden=true};addEventListener('appinstalled',()=>{dip=null;$('#inst').hidden=true;$('#cinst').hidden=true});matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(isApp())$('#inst').hidden=true});
 const upd=()=>{const on=navigator.onLine,n=$('#net');$('#off').style.display=on?'none':'block';n.classList.toggle('off',!on);n.lastChild.textContent=on?'Online':'Offline'};addEventListener('online',upd);addEventListener('offline',upd);upd();
 // content-only updates: content.json changed on the server although the app files did not
 async function contentChanged(){if(!navigator.onLine||!CJ)return false;try{const t=await (await fetch('content.json',{cache:'no-store'})).text();if(!t||t===CJ)return false;JSON.parse(t);return true}catch(e){return false}}
