@@ -52,6 +52,8 @@ main{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env
 .card:active,.item:active{transform:scale(.98);background:var(--bd)}
 .item{padding:10px;gap:12px;min-height:84px}.th{width:72px;height:72px;border-radius:10px}
 .item b{font-size:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.item b.or{font-size:1.15rem;font-weight:800;line-height:1.35;color:var(--tx);background:rgba(250,204,21,.28);border-left:4px solid var(--pri);border-radius:8px;padding:4px 8px}
+.item small.en{font-size:.72rem;color:var(--mut);margin-top:4px}
 .item small{display:block;font-size:.9rem;color:var(--mut)}
 #lb button{width:44px;height:44px;background:#0009;color:#fff;font-size:1.2rem;box-shadow:0 0 0 1px #fff6}
 @media(max-width:360px){.grid{grid-template-columns:1fr}}
@@ -98,14 +100,14 @@ function section(id){
 }
 function itemHTML(i,n){
   const th=i.thumb?`<img class=th loading=lazy src="${esc(i.thumb)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'th',textContent:'${TI[i.t]}'}))">`:`<div class=th>${TI[i.t]}</div>`;
-  return `<div class=item data-u="${esc(i.url)}" data-t="${i.t}"><div>${th}</div><div style="flex:1;min-width:0">${lab(i).replace('<b>','<b><span class=badge>'+i.t.toUpperCase()+'</span> ')}<span class=slot></span></div></div>`}
+  return `<div class=item data-u="${esc(i.url)}" data-t="${i.t}"><div>${th}</div><div style="flex:1;min-width:0"><b class=or><span class=badge>${i.t.toUpperCase()}</span> ${esc(i.or||i.en)}</b><small class=en>${esc(i.en)}</small><span class=slot></span></div></div>`}
 function bind(root,items){root.querySelectorAll('.item').forEach(el=>el.onclick=()=>open(el))}
 async function open(el){
   const u=el.dataset.u,t=el.dataset.t;
   if(t==='image'){ovOpen();$('#lb img').src=u;$('#lb').style.display='block'}
   else if(t==='video'||t==='audio'){const sl=el.querySelector('.slot');if(sl.firstChild){sl.innerHTML='';return}
     sl.innerHTML=`<${t} controls playsinline preload=metadata src="${u}" onclick="event.stopPropagation()"></${t}>`}
-  else openPdf(u,el.querySelector('b').textContent)
+  else openPdf(u,el.querySelector('.en').textContent)
 }
 let pdf=null,zoom=1,tok=0;
 function loadLib(){return window.pdfjsLib?Promise.resolve():new Promise((ok,no)=>{const e=document.createElement('script');e.src='lib/pdf.min.js';e.onload=()=>{pdfjsLib.GlobalWorkerOptions.workerSrc='lib/pdf.worker.min.js';ok()};e.onerror=no;document.head.append(e)})}

@@ -1,4 +1,4 @@
-const V='iec-v39',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js','update-kit.js'];
+const V='iec-v40',SHELL=['./','index.html','manifest.webmanifest','content.json','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-512.png','icons/apple-touch-icon.png','icons/cover-full.jpg','icons/cover-asha-cycle.jpg','lib/pdf.min.js','lib/pdf.worker.min.js','update-kit.js'];
 // install: download every app file and report the real progress to the page (drives the update ring).
 // The new version then WAITS; it is switched on only when the user taps "Update" (see update-kit.js).
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(V);let n=0,dead=0;
